@@ -1,0 +1,33 @@
+name: Scheduled Jobs
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Job 1: Runs daily at midnight
+    - cron: '*/5 * * * *' # Job 2: Runs daily at noon
+    - cron: '*/5 * * * *' # Job 3: Runs daily at 6 PM
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        branch: [main, testghcron1, testcron2]
+        schedule: [midnight, noon, evening]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ matrix.branch }}
+
+      - name: Run script
+        run: |
+          if [ "${{ matrix.schedule }}" == "midnight" ]; then
+            echo "Running midnight job on ${{ matrix.branch }} branch"
+            # Add your midnight job script here
+          elif [ "${{ matrix.schedule }}" == "noon" ]; then
+            echo "Running noon job on ${{ matrix.branch }} branch"
+            # Add your noon job script here
+          elif [ "${{ matrix.schedule }}" == "evening" ]; then
+            echo "Running evening job on ${{ matrix.branch }} branch"
+            # Add your evening job script here
+          fi
